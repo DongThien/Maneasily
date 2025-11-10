@@ -1,0 +1,16 @@
+README.md
+.gitignore
+index.html
+package.json
+src/
+css/main.css
+js/main.js
+components/.gitkeep
+pages/.gitkeep
+services/.gitkeep
+assets/images/.gitkeep
+assets/icons/.gitkeep
+assets/fonts/.gitkeep
+docs/ARCHITECTURE.md
+tests/.gitkeep
+dist/.gitkeep
