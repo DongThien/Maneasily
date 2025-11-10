@@ -18,9 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelListBtn = document.querySelector('.cancel-list-btn');
     const boardListsContainer = document.getElementById('board-lists');
 
-    // --- HELPER FUNCTIONS (MỚI) ---
-    // (Đặt các hàm này ngay sau khi lấy element, trước khi dùng)
-
+    // --- HELPER FUNCTIONS ---
     /** Đếm số lượng cột đang hiển thị */
     function getVisibleColumnsCount() {
         let count = 0;
@@ -30,42 +28,127 @@ document.addEventListener('DOMContentLoaded', () => {
         return count;
     }
 
+    // --- LOGIC ẨN/HIỆN CỘT VÀ TAB (TOÀN BỘ KHỐI ĐÃ CẬP NHẬT) ---
+
     /**
-     * Logic bật/tắt cột.
-     * Trả về `true` nếu thành công, `false` nếu bị chặn (do là cột cuối).
+     * Logic bật/tắt cột DESKTOP. (ĐÃ SỬA LỖI ACTIVE STATE)
      */
     function toggleColumn(column, resizer, button) {
         const isHiding = !column.classList.contains('hidden');
         
         if (isHiding && getVisibleColumnsCount() <= 1) {
-            // Không thể ẩn cột cuối cùng
             console.warn("Không thể ẩn cột cuối cùng.");
-            // Có thể thêm alert() ở đây nếu muốn
             return false; // Báo thất bại
         }
 
+        // Thực hiện toggle
         column.classList.toggle('hidden');
         
-        // Cột Board không có resizer bên phải nó, nên `resizer` có thể null
         if (resizer) {
             resizer.classList.toggle('hidden');
         }
-        button.classList.toggle('active');
+
+        // FIX: Đồng bộ hóa trạng thái
+        const isColumnNowHidden = column.classList.contains('hidden');
+        if (isColumnNowHidden) {
+            button.classList.remove('active'); // Cột ẩn -> nút KHÔNG active
+        } else {
+            button.classList.add('active'); // Cột hiện -> nút CÓ active
+        }
         return true; // Báo thành công
     }
 
-    // --- 1. Chức năng Ẩn/Hiện Cột (ĐÃ CẬP NHẬT) ---
+    const allColumns = [taskColumn, calendarColumn, boardColumn];
+    const allToggleButtons = [toggleTask, toggleCalendar, toggleBoard];
+
+    /**
+     * Hiển thị một tab duy nhất trên MOBILE
+     * @param {string} columnId (e.g., 'task-column')
+     */
+    function showMobileTab(columnId) {
+        // 1. Cập nhật các Cột (Thêm/xóa class .mobile-active)
+        allColumns.forEach(col => {
+            col.classList.toggle('mobile-active', col.id === columnId);
+        });
+
+        // 2. Cập nhật các Nút (Thêm/xóa class .active)
+        allToggleButtons.forEach(btn => {
+            const btnName = btn.id.replace('toggle-', '');
+            const colName = columnId.replace('-column', '');
+            btn.classList.toggle('active', btnName === colName);
+        });
+    }
+
+    // --- SỬA LẠI CÁC EVENT LISTENER ---
+    // (Kết hợp logic Desktop/Mobile)
+
     toggleTask.addEventListener('click', () => {
-        toggleColumn(taskColumn, taskResizer, toggleTask);
+        if (window.innerWidth <= 768) {
+            showMobileTab('task-column');
+        } else {
+            toggleColumn(taskColumn, taskResizer, toggleTask);
+        }
     });
 
     toggleCalendar.addEventListener('click', () => {
-        toggleColumn(calendarColumn, calendarResizer, toggleCalendar);
+        if (window.innerWidth <= 768) {
+            showMobileTab('calendar-column');
+        } else {
+            toggleColumn(calendarColumn, calendarResizer, toggleCalendar);
+        }
     });
 
     toggleBoard.addEventListener('click', () => {
-        toggleColumn(boardColumn, null, toggleBoard); // Cột Board không có resizer đi kèm
+        if (window.innerWidth <= 768) {
+            showMobileTab('board-column');
+        } else {
+            toggleColumn(boardColumn, null, toggleBoard); 
+        }
     });
+
+    // --- KHỞI TẠO TRẠNG THÁI KHI TẢI TRANG & RESIZE ---
+    function initializeView() {
+        if (window.innerWidth <= 768) {
+            // --- Chế độ Mobile ---
+            const activeBtn = document.querySelector('.app-footer button.active');
+            let initialTab = 'board-column'; // Mặc định
+            
+            if (activeBtn && activeBtn.id.includes('toggle-')) {
+                 initialTab = activeBtn.id.replace('toggle-', '') + '-column';
+            }
+            showMobileTab(initialTab); 
+            
+        } else {
+            // --- Chế độ Desktop ---
+            // Xóa class mobile-active
+            allColumns.forEach(col => col.classList.remove('mobile-active'));
+            
+            // Đồng bộ lại class 'active' cho nút dựa trên trạng thái 'hidden' của cột
+            allToggleButtons.forEach(btn => {
+                let col;
+                if (btn.id === 'toggle-task') col = taskColumn;
+                if (btn.id === 'toggle-calendar') col = calendarColumn;
+                if (btn.id === 'toggle-board') col = boardColumn;
+
+                if (col) {
+                    btn.classList.toggle('active', !col.classList.contains('hidden'));
+                }
+            });
+        }
+    }
+
+    // Chạy khi tải trang
+    initializeView();
+
+    // Chạy khi resize (để xử lý chuyển đổi)
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(initializeView, 100);
+    });
+    
+    // --- HẾT KHỐI LOGIC ẨN/HIỆN ---
+
 
     // --- 2. Chức năng Thêm Thẻ (Add Card) ---
     mainContainer.addEventListener('click', (e) => {
@@ -189,15 +272,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
+    // --- 5. Chức năng Resize Cột ---
     function initResizing() {
         let isResizing = false;
         let currentResizer = null;
         let prevColumn = null;
-        let nextColumn = null; // Cột kế tiếp
+        let nextColumn = null;
         let startX = 0;
-        let prevStartWidth = 0; // Chiều rộng cột trước
-        let nextStartWidth = 0; // Chiều rộng cột sau
+        let prevStartWidth = 0; 
+        let nextStartWidth = 0; 
 
         mainContainer.addEventListener('mousedown', (e) => {
             if (e.target.classList.contains('resizer')) {
@@ -208,21 +291,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const prevId = currentResizer.getAttribute('data-prev-id');
                 prevColumn = document.getElementById(prevId);
 
-                // --- TÌM CỘT TIẾP THEO (MỚI) ---
-                // Tìm cột 'board-column' đầu tiên đang hiển thị (không 'hidden')
-                // nằm sau cái resizer này.
                 let nextEl = currentResizer.nextElementSibling;
                 while (nextEl) {
                     if (nextEl.classList.contains('board-column') && !nextEl.classList.contains('hidden')) {
-                        nextColumn = nextEl; // Đã tìm thấy
+                        nextColumn = nextEl;
                         break;
                     }
                     nextEl = nextEl.nextElementSibling;
                 }
-                // --- KẾT THÚC TÌM ---
 
                 if (!prevColumn || !nextColumn) {
-                    // Nếu không tìm thấy 1 trong 2 cột, không làm gì cả
                     isResizing = false;
                     return;
                 }
@@ -231,16 +309,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 prevStartWidth = prevColumn.getBoundingClientRect().width;
                 nextStartWidth = nextColumn.getBoundingClientRect().width;
                 
-                // --- "ĐÓNG BĂNG" KÍCH THƯỚC (FIX LỖI GIẬT) ---
-                // Set flex-basis cho tất cả các cột đang hiển thị
-                // để ngăn flex-grow/shrink tính toán lại khi kéo.
                 const allVisibleColumns = document.querySelectorAll('.board-column:not(.hidden)');
                 allVisibleColumns.forEach(col => {
                     col.style.flexBasis = col.getBoundingClientRect().width + 'px';
-                    col.style.flexGrow = '0'; // Tắt grow/shrink
+                    col.style.flexGrow = '0';
                     col.style.flexShrink = '0';
                 });
-                // --- KẾT THÚC ĐÓNG BĂNG ---
                 
                 currentResizer.classList.add('is-dragging');
                 
@@ -249,55 +323,42 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // HÀM ĐÃ ĐƯỢC CẬP NHẬT
         function handleMouseMove(e) {
             if (!isResizing) return;
-
-            e.preventDefault(); // Ngăn chọn text
+            e.preventDefault(); 
             
             const dx = e.clientX - startX;
-            const newPrevWidth = prevStartWidth + dx; // Cột trước to ra
-            const newNextWidth = nextStartWidth - dx; // Cột sau nhỏ lại
-            
-            const minWidth = 100; // Giới hạn chiều rộng tối thiểu
+            const newPrevWidth = prevStartWidth + dx;
+            const newNextWidth = nextStartWidth - dx;
+            const minWidth = 100; 
 
             // Logic ẩn cột (khi kéo quá nhỏ)
             if (newPrevWidth < minWidth) {
-                // Thử ẩn cột TRƯỚC
                 let toggleSuccess = false;
                 if (prevColumn.id === 'task-column') {
                     toggleSuccess = toggleColumn(taskColumn, taskResizer, toggleTask);
                 } else if (prevColumn.id === 'calendar-column') {
                     toggleSuccess = toggleColumn(calendarColumn, calendarResizer, toggleCalendar);
                 }
-                
-                if (toggleSuccess) {
-                    handleMouseUp(); // Dừng kéo nếu ẩn thành công
-                }
-                return; // Không làm gì nữa
+                if (toggleSuccess) handleMouseUp();
+                return; 
             }
             
             if (newNextWidth < minWidth) {
-                // Thử ẩn cột SAU
                 let toggleSuccess = false;
                 if (nextColumn.id === 'calendar-column') {
                     toggleSuccess = toggleColumn(calendarColumn, calendarResizer, toggleCalendar);
                 } else if (nextColumn.id === 'board-column') {
                     toggleSuccess = toggleColumn(boardColumn, null, toggleBoard);
                 }
-                
-                if (toggleSuccess) {
-                    handleMouseUp(); // Dừng kéo nếu ẩn thành công
-                }
-                return; // Không làm gì nữa
+                if (toggleSuccess) handleMouseUp();
+                return; 
             }
 
-            // Nếu cả hai đều ổn, cập nhật cả hai
             prevColumn.style.flexBasis = `${newPrevWidth}px`;
             nextColumn.style.flexBasis = `${newNextWidth}px`;
         }
 
-        // HÀM ĐÃ ĐƯỢC CẬP NHẬT
         function handleMouseUp() {
             if (!isResizing) return;
             isResizing = false;
@@ -306,21 +367,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentResizer.classList.remove('is-dragging');
             }
             
-            // --- "RÃ ĐÔNG" CÁC CỘT (ĐÃ SỬA) ---
-            // Chúng ta chỉ xóa 'grow' và 'shrink' để chúng quay về CSS default (là 1)
-            // NHƯNG GIỮ LẠI 'flex-basis' (kích thước pixel) mà người dùng đã kéo.
             const allColumns = document.querySelectorAll('.board-column');
             allColumns.forEach(col => {
-                // col.style.flexBasis = null; // <-- XÓA BỎ DÒNG NÀY
                 col.style.flexGrow = null;
                 col.style.flexShrink = null;
             });
-            // --- KẾT THÚC RÃ ĐÔNG ---
             
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
             
-            // Reset
             currentResizer = null;
             prevColumn = null;
             nextColumn = null;
@@ -331,35 +386,28 @@ document.addEventListener('DOMContentLoaded', () => {
     
     initResizing();
 
-    // --- 6. Chức năng Kéo Footer (MÃ MỚI) ---
-    
+    // --- 6. Chức năng Kéo Footer ---
     const draggableFooter = document.querySelector('.app-footer');
     let isDraggingFooter = false;
     let footerOffsetX = 0;
-    let hasDragged = false; // Biến để kiểm tra xem có phải là click hay kéo
+    let hasDragged = false; 
 
     draggableFooter.addEventListener('mousedown', (e) => {
-        // Chỉ bắt đầu kéo nếu click vào nền footer (không phải nút)
-        // HOẶC nếu click vào nút nhưng không phải nút "Switch Boards"
-        // (Chúng ta giả định mọi nút đều có thể dùng để kéo)
+        // Chỉ kéo nếu đang ở desktop
+        if (window.innerWidth <= 768) {
+             isDraggingFooter = false;
+             return;
+        }
         
         isDraggingFooter = true;
-        hasDragged = false; // Reset cờ "đã kéo"
+        hasDragged = false; 
         draggableFooter.classList.add('dragging');
-
-        // Lấy vị trí 'left' hiện tại
-        // Lần đầu tiên, nó sẽ là 50% và có transform.
-        // Chúng ta cần chuyển nó sang pixel.
         const rect = draggableFooter.getBoundingClientRect();
         
-        // Chuyển đổi vị trí sang pixel tuyệt đối
-        // và loại bỏ transform để tránh xung đột
         if (getComputedStyle(draggableFooter).transform !== 'none') {
              draggableFooter.style.left = `${rect.left}px`;
              draggableFooter.style.transform = 'none';
         }
-
-        // Tính toán độ lệch của chuột so với lề trái của footer
         footerOffsetX = e.clientX - rect.left;
 
         document.addEventListener('mousemove', onFooterMove);
@@ -368,16 +416,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function onFooterMove(e) {
         if (!isDraggingFooter) return;
-        
-        hasDragged = true; // Đánh dấu là người dùng đã kéo
-        e.preventDefault(); // Ngăn các hành vi mặc định (như chọn text)
+        hasDragged = true; 
+        e.preventDefault(); 
 
         let newLeft = e.clientX - footerOffsetX;
-        
-        // Giới hạn kéo, không cho footer ra khỏi màn hình
-        const minLeft = 10; // Cách lề trái 10px
-        const maxLeft = window.innerWidth - draggableFooter.offsetWidth - 10; // Cách lề phải 10px
-
+        const minLeft = 10; 
+        const maxLeft = window.innerWidth - draggableFooter.offsetWidth - 10; 
         if (newLeft < minLeft) newLeft = minLeft;
         if (newLeft > maxLeft) newLeft = maxLeft;
 
@@ -386,20 +430,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function onFooterUp() {
         if (!isDraggingFooter) return;
-
         isDraggingFooter = false;
         draggableFooter.classList.remove('dragging');
         document.removeEventListener('mousemove', onFooterMove);
         document.removeEventListener('mouseup', onFooterUp);
     }
 
-    // Cập nhật: Ngăn các nút kích hoạt sự kiện click nếu đang kéo
-    // Chúng ta cần thêm một 'capture' listener
     draggableFooter.addEventListener('click', (e) => {
         if (hasDragged) {
-            e.stopPropagation(); // Ngăn sự kiện click (toggle) nếu đó là một cú kéo
+            e.stopPropagation(); 
             e.preventDefault();
         }
-    }, true); // 'true' để chạy ở 'capture' phase
+    }, true); 
 
 });

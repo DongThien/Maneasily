@@ -100,11 +100,26 @@
     </main>
 
     <footer class="app-footer">
-        <button id="toggle-task" class="active">Task</button>
-        <button id="toggle-calendar">Calendar</button>
-        <button id="toggle-board" class="active">Board</button>
-        <span>|</span>
-        <button>Switch Boards</button>
+        <button id="toggle-task">
+            <i class="fa-solid fa-list-check"></i>
+            <span class="btn-text">Task</span>
+        </button>
+        
+        <button id="toggle-calendar">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span class="btn-text">Calendar</span>
+        </button>
+        
+        <button id="toggle-board" class="active">
+            <i class="fa-solid fa-table-columns"></i>
+            <span class="btn-text">Board</span>
+        </button>
+        
+        <span class="footer-divider">|</span>
+        
+        <button id="switch-boards-btn"> 
+            <i class="fa-solid fa-table-list"></i> <span class="btn-text">Switch Boards</span>
+        </button>
     </footer>
 
     <script src="Board.js"></script>
