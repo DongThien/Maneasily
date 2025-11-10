@@ -93,8 +93,8 @@ body {
 .board-column {
     /* Dùng flex-basis thay cho width */
     flex-basis: 300px;
-    flex-shrink: 0; /* Giữ nguyên, không co lại */
-    flex-grow: 0;   /* Không tự động lớn lên */
+    flex-shrink: 1; /* Giữ nguyên, không co lại */
+    flex-grow: 1;   /* Không tự động lớn lên */
 
     border-radius: 8px;
     padding: 15px;
@@ -117,9 +117,9 @@ body {
 }
 
 /* Kiểu cột */
-.task-col { background-color: #7C9A74; }
-.calendar-col { background-color: #2C2C2C; color: white; }
-.board-col { background-color: #B3D4DB; flex-grow: 1;}
+.task-col { background-color: #7C9A74;}
+.calendar-col { background-color: #2C2C2C; color: white;}
+.board-col { background-color: #B3D4DB;}
 
 .column-header {
     display: flex;
