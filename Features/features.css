@@ -5,7 +5,6 @@
   padding: 0;
   font-family: 'Inter', sans-serif;
 }
-
 :root {
   --color-orange: #ff7f32;
   --color-orange-hover: #e26f28;
@@ -16,50 +15,27 @@
   --color-text-light: #555;
   --color-border: #ddd;
 }
-
-/* --- Thẻ <html> mượt mà --- */
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background-color: var(--color-bg);
-  color: var(--color-text-dark);
-}
-
+html { scroll-behavior: smooth; }
+body { background-color: var(--color-bg); color: var(--color-text-dark); }
 .green { color: var(--color-green); }
 .orange { color: var(--color-orange); }
 
-/* --- 1. Header (Copy từ home.css & chỉnh sửa) --- */
+/* --- 1. Header --- */
 .sticky-header {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 80px;
-  /* Hiệu ứng dính (sticky) */
   position: sticky;
   top: 0;
   background-color: var(--color-bg);
   z-index: 1000;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
-
-.logo {
-  display: flex;
-  align-items: center;
-}
-
-.logo img {
-  width: 110px;
-  margin-right: 10px;
-}
-
-.sticky-header nav {
-  display: flex;
-  align-items: center;
-}
-
+.logo { display: flex; align-items: center; }
+.logo img { width: 110px; margin-right: 10px; }
+.sticky-header nav { display: flex; align-items: center; }
 .sticky-header nav a {
   margin: 0 15px;
   text-decoration: none;
@@ -69,50 +45,41 @@ body {
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
 }
-
-.sticky-header nav a:hover {
-  color: var(--color-orange);
-}
-
-/* Đánh dấu link đang active */
+.sticky-header nav a:hover { color: var(--color-orange); }
 .sticky-header nav a.active-nav {
   color: var(--color-orange);
   font-weight: 600;
   border-bottom-color: var(--color-orange);
 }
-
 .signup-btn {
   background-color: var(--color-orange);
-  color: white !important; /* Ghi đè màu chữ */
+  color: white !important;
   border: none;
   border-radius: 10px;
-  padding: 10px 20px !important; /* Ghi đè padding */
+  padding: 10px 20px !important;
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
-  border-bottom: none !important; /* Ghi đè border */
+  border-bottom: none !important;
   transition: background-color 0.2s ease;
 }
+.signup-btn:hover { background-color: var(--color-orange-hover); }
 
-.signup-btn:hover {
-  background-color: var(--color-orange-hover);
-  color: white !important;
+/* --- Mobile Nav Toggle (Hamburger) --- */
+.mobile-nav-toggle {
+  display: none; /* Ẩn trên desktop */
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  z-index: 1100;
 }
 
 /* --- 2. Hero Section --- */
-.hero-section {
-  text-align: center;
-  padding: 80px 40px;
-  background-color: #fff;
-}
-
-.hero-section h1 {
-  font-size: 3rem; /* 48px */
-  font-weight: 700;
-  margin-bottom: 15px;
-}
-
+.hero-section { text-align: center; padding: 80px 40px; background-color: #fff; }
+.hero-section h1 { font-size: 3rem; font-weight: 700; margin-bottom: 15px; }
 .hero-section p {
   font-size: 1.1rem;
   color: var(--color-text-light);
@@ -132,16 +99,8 @@ body {
 }
 
 /* --- 3a. Sidebar --- */
-.features-sidebar {
-  width: 240px;
-  flex-shrink: 0;
-}
-
-.features-sidebar nav {
-  position: sticky;
-  top: 120px; /* Dưới header (80px) + khoảng cách */
-}
-
+.features-sidebar { width: 240px; flex-shrink: 0; }
+.features-sidebar nav { position: sticky; top: 120px; }
 .sidebar-link {
   display: block;
   text-decoration: none;
@@ -154,12 +113,7 @@ body {
   transition: all 0.2s ease;
   border-left: 3px solid transparent;
 }
-
-.sidebar-link:hover {
-  background-color: #fff;
-  color: var(--color-text-dark);
-}
-
+.sidebar-link:hover { background-color: #fff; color: var(--color-text-dark); }
 .sidebar-link.active-link {
   background-color: #fff;
   color: var(--color-orange);
@@ -169,39 +123,21 @@ body {
 }
 
 /* --- 3b. Content --- */
-.features-content {
-  flex-grow: 1;
-}
-
+.features-content { flex-grow: 1; }
 .feature-section {
   display: flex;
   gap: 50px;
   align-items: center;
   margin-bottom: 120px;
-  min-height: 400px; /* Đảm bảo đủ chiều cao cho scrollspy */
-  padding-top: 40px; /* Offset cho scrollspy */
-  
-  /* Hiệu ứng Fade-in (ban đầu ẩn) */
+  min-height: 400px;
+  padding-top: 40px;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
-
-/* Lớp .visible do JS thêm vào */
-.feature-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Đảo ngược thứ tự cho section chẵn (Image-Text) */
-.feature-section:nth-child(even) {
-  flex-direction: row-reverse;
-}
-
-.feature-text {
-  flex: 1;
-}
-
+.feature-section.visible { opacity: 1; transform: translateY(0); }
+.feature-section:nth-child(even) { flex-direction: row-reverse; }
+.feature-text { flex: 1; }
 .feature-subtitle {
   font-size: 0.9rem;
   font-weight: 600;
@@ -211,22 +147,9 @@ body {
   margin-bottom: 8px;
   display: block;
 }
-
-.feature-text h2 {
-  font-size: 2.5rem; /* 40px */
-  margin-bottom: 20px;
-}
-
-.feature-text p {
-  font-size: 1.05rem;
-  line-height: 1.7;
-  color: var(--color-text-light);
-}
-
-.feature-image {
-  flex: 1.1;
-}
-
+.feature-text h2 { font-size: 2.5rem; margin-bottom: 20px; }
+.feature-text p { font-size: 1.05rem; line-height: 1.7; color: var(--color-text-light); }
+.feature-image { flex: 1.1; }
 .feature-image img {
   width: 100%;
   border-radius: 16px;
@@ -234,64 +157,28 @@ body {
   object-fit: cover;
 }
 
-
-/* --- 4. Footer (Copy từ home.css) --- */
+/* --- 4. Footer --- */
 .footer {
   background: linear-gradient(90deg, #0d1b1e 0%, #112c2f 100%);
   color: #fff;
   padding: 70px 12%;
   margin-top: 80px;
 }
-
+/* ... (toàn bộ style footer giữ nguyên) ... */
 .footer-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 50px;
   align-items: flex-start;
 }
-
-.footer-col h3 {
-  font-size: 1.5rem;
-  color: #ff7f32;
-  margin-bottom: 15px;
-}
-
-.footer-col h4 {
-  font-size: 1.1rem;
-  color: #32b768;
-  margin-bottom: 15px;
-}
-
-.footer-col p {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: #ccc;
-}
-
-.footer-col ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-col ul li {
-  margin-bottom: 10px;
-}
-
-.footer-col ul li a {
-  color: #ccc;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-col ul li a:hover {
-  color: #ff7f32;
-}
-
-.social-links {
-  display: flex;
-  gap: 12px;
-}
-
+.footer-col h3 { font-size: 1.5rem; color: #ff7f32; margin-bottom: 15px; }
+.footer-col h4 { font-size: 1.1rem; color: #32b768; margin-bottom: 15px; }
+.footer-col p { font-size: 0.95rem; line-height: 1.6; color: #ccc; }
+.footer-col ul { list-style: none; padding: 0; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { color: #ccc; text-decoration: none; transition: color 0.3s ease; }
+.footer-col ul li a:hover { color: #ff7f32; }
+.social-links { display: flex; gap: 12px; }
 .social-links a {
   display: inline-flex;
   align-items: center;
@@ -304,12 +191,7 @@ body {
   font-size: 16px;
   transition: all 0.3s ease;
 }
-
-.social-links a:hover {
-  background-color: #ff7f32;
-  transform: translateY(-3px);
-}
-
+.social-links a:hover { background-color: #ff7f32; transform: translateY(-3px); }
 .footer-bottom {
   text-align: center;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
@@ -319,60 +201,69 @@ body {
   font-size: 0.9rem;
 }
 
-/* --- Responsive (Đơn giản) --- */
+/* --- Responsive --- */
 @media (max-width: 1000px) {
-  .sticky-header {
-    padding: 15px 30px;
-  }
-  
-  .features-container {
-    flex-direction: column;
-  }
-  
-  .features-sidebar {
-    width: 100%;
-  }
-  
+  .sticky-header { padding: 15px 30px; }
+  .features-container { flex-direction: column; }
+  .features-sidebar { width: 100%; }
   .features-sidebar nav {
-    position: static; /* Hủy dính */
+    position: static;
     display: flex;
-    overflow-x: auto; /* Cho phép cuộn ngang */
+    overflow-x: auto;
     gap: 10px;
+    padding-bottom: 10px; /* Thêm padding */
   }
-
   .sidebar-link {
-    flex-shrink: 0; /* Không co lại */
+    flex-shrink: 0;
     border-bottom: 3px solid transparent;
     border-left: none;
   }
-
   .sidebar-link.active-link {
     border-bottom-color: var(--color-orange);
     border-left-color: transparent;
     transform: none;
   }
-
   .feature-section,
   .feature-section:nth-child(even) {
     flex-direction: column-reverse; /* Luôn là Ảnh - Text */
   }
-
-  .footer-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .feature-text { text-align: center; }
+  .footer-container { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 600px) {
+  .hero-section h1 { font-size: 2.2rem; }
+  .feature-text h2 { font-size: 2rem; }
+  .footer { padding: 50px 8%; }
+  .footer-container { grid-template-columns: 1fr; }
+  
+  /* --- Hamburger Menu Styles --- */
+  .mobile-nav-toggle {
+    display: block; /* Hiển thị nút hamburger */
+  }
   .sticky-header nav {
-    display: none; /* Ẩn nav trên mobile */
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 80px; /* Chiều cao header */
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 20px;
+    z-index: 1050;
   }
-  .hero-section h1 {
-    font-size: 2.2rem;
+  .sticky-header nav.nav-visible {
+    display: flex; /* Hiển thị nav khi được click */
   }
-  .feature-text h2 {
-    font-size: 2rem;
+  .sticky-header nav a {
+    margin: 10px 0;
+    width: 100%;
+    padding: 10px;
   }
-  .footer-container {
-    grid-template-columns: 1fr;
+  .signup-btn {
+    width: 100%;
+    text-align: center;
+    padding: 12px 20px !important;
   }
 }

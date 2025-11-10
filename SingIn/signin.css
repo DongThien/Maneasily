@@ -5,7 +5,6 @@
   padding: 0;
   font-family: 'Inter', sans-serif;
 }
-
 :root {
   --color-orange: #ff7f32;
   --color-orange-hover: #e26f28;
@@ -15,7 +14,6 @@
   --color-border: #ddd;
   --color-error: #d93025; /* Màu đỏ cho lỗi */
 }
-
 body {
   background-color: var(--color-bg);
   color: var(--color-text-dark);
@@ -25,7 +23,6 @@ body {
 }
 
 /* --- Navigation --- */
-/* Tái sử dụng class từ signup.css cho đồng bộ */
 .signup-nav {
   width: 100%;
   display: flex;
@@ -33,22 +30,9 @@ body {
   align-items: center;
   padding: 20px 60px;
 }
-
-.logo {
-  display: flex;
-  align-items: center;
-}
-
-.logo img {
-  width: 110px;
-  margin-right: 10px;
-}
-
-.logo h2 {
-  font-size: 1.6rem;
-  color: var(--color-text-dark);
-}
-
+.logo { display: flex; align-items: center; }
+.logo img { width: 110px; margin-right: 10px; }
+.logo h2 { font-size: 1.6rem; color: var(--color-text-dark); }
 .signin-link {
   display: flex;
   align-items: center;
@@ -57,7 +41,6 @@ body {
   font-weight: 500;
   color: var(--color-text-light);
 }
-
 .btn-signin {
   background-color: var(--color-orange);
   color: white;
@@ -69,21 +52,27 @@ body {
   text-decoration: none;
   transition: background-color 0.2s ease;
 }
+.btn-signin:hover { background-color: var(--color-orange-hover); }
 
-.btn-signin:hover {
-  background-color: var(--color-orange-hover);
+/* --- Mobile Nav Toggle (Hamburger) --- */
+.mobile-nav-toggle {
+  display: none; /* Ẩn trên desktop */
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  z-index: 1100;
 }
 
 /* --- Signin Form Container --- */
-/* Tái sử dụng class từ signup.css cho đồng bộ */
 .signup-container {
-  flex-grow: 1; /* Đẩy form vào giữa theo chiều dọc */
+  flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
 }
-
 .signup-card {
   background-color: #ffffff;
   border-radius: 16px;
@@ -92,13 +81,12 @@ body {
   width: 100%;
   max-width: 450px;
 }
-
 .signup-card h1 {
-  font-size: 2rem; /* 32px */
+  font-size: 2rem;
   font-weight: 700;
   color: var(--color-text-dark);
   margin-bottom: 30px;
-  text-align: left; /* Giống thiết kế */
+  text-align: left;
 }
 
 /* --- Social Auth (Đẩy lên trên) --- */
@@ -106,9 +94,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-bottom: 30px; /* Tạo khoảng cách với form bên dưới */
+  margin-bottom: 30px;
 }
-
 .btn-social {
   display: flex;
   align-items: center;
@@ -126,31 +113,23 @@ body {
   cursor: pointer;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
-
 .btn-social:hover {
   background-color: #f9f9f9;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
-
 .btn-social i { font-size: 1.2rem; }
 .btn-social .fa-google { color: #DB4437; }
 .btn-social .fa-facebook { color: #4267B2; }
 .btn-social .fa-apple { color: #000000; }
 
 /* --- Form Elements (Không có <label>) --- */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* Khoảng cách giữa Email và Password */
-}
-
+form { display: flex; flex-direction: column; gap: 20px; }
 .input-group {
   display: flex;
   flex-direction: column;
   position: relative;
-  gap: 6px; /* Khoảng cách giữa input và error message */
+  gap: 6px;
 }
-
 .input-group input {
   width: 100%;
   padding: 12px 15px;
@@ -159,34 +138,24 @@ form {
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-
-.input-group input::placeholder {
-  color: #999;
-}
-
+.input-group input::placeholder { color: #999; }
 .input-group input:focus {
   outline: none;
   border-color: var(--color-orange);
   box-shadow: 0 0 0 3px rgba(255, 127, 50, 0.2);
 }
 
-/* --- Style Lỗi (Giống signup.css) --- */
-.input-group input.input-error {
-  border-color: var(--color-error);
-}
-
+/* --- Style Lỗi --- */
+.input-group input.input-error { border-color: var(--color-error); }
 .input-group input.input-error:focus {
   box-shadow: 0 0 0 3px rgba(217, 48, 37, 0.2);
 }
-
 .error-message {
   color: var(--color-error);
   font-size: 0.85rem;
   font-weight: 500;
-  min-height: 1.2em; /* Giữ chiều cao ổn định */
+  min-height: 1.2em;
 }
-
-/* --- Nút "Sign in" (Tái sử dụng) --- */
 .btn-signup-main {
   width: 100%;
   background-color: var(--color-orange);
@@ -200,10 +169,7 @@ form {
   transition: background-color 0.2s ease;
   margin-top: 10px;
 }
-
-.btn-signup-main:hover {
-  background-color: var(--color-orange-hover);
-}
+.btn-signup-main:hover { background-color: var(--color-orange-hover); }
 
 /* --- Link "Forgot Password" --- */
 .forgot-password {
@@ -215,7 +181,38 @@ form {
   font-size: 0.9rem;
   font-weight: 500;
 }
+.forgot-password:hover { text-decoration: underline; }
 
-.forgot-password:hover {
-  text-decoration: underline;
+/* --- Responsive --- */
+@media (max-width: 600px) {
+  .signup-nav {
+    padding: 20px 30px;
+  }
+  .logo img { width: 90px; }
+  .logo h2 { font-size: 1.4rem; }
+  
+  /* Ẩn chữ, chỉ để lại nút Sign up */
+  .signin-link span {
+    display: none;
+  }
+  
+  .signup-card {
+    padding: 25px;
+    box-shadow: none;
+    border: 1px solid var(--color-border);
+  }
+  
+  .signup-card h1 {
+    font-size: 1.8rem;
+  }
+  .social-auth {
+    gap: 10px;
+  }
+
+  /* Trang này không có nav chính,
+    vì vậy chúng ta ẩn nút hamburger đi
+  */
+  .mobile-nav-toggle {
+    display: none;
+  }
 }

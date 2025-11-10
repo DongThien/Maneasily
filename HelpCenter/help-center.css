@@ -19,7 +19,7 @@ body { background-color: var(--color-bg); color: var(--color-text-dark); }
 .green { color: var(--color-green); }
 .orange { color: var(--color-orange); }
 
-/* --- 1. Header (Copy từ resources.css) --- */
+/* --- 1. Header --- */
 .sticky-header {
   width: 100%;
   display: flex;
@@ -65,22 +65,25 @@ body { background-color: var(--color-bg); color: var(--color-text-dark); }
 }
 .signup-btn:hover { background-color: var(--color-orange-hover); }
 
+/* --- Mobile Nav Toggle (Hamburger) --- */
+.mobile-nav-toggle {
+  display: none; /* Ẩn trên desktop */
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  z-index: 1100;
+}
+
 /* --- 2. Help Hero Section --- */
 .help-hero {
   text-align: center;
   padding: 80px 40px;
   background-color: #fff;
 }
-.help-hero h1 {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 30px;
-}
-.help-search {
-  position: relative;
-  max-width: 700px;
-  margin: 0 auto;
-}
+.help-hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 30px; }
+.help-search { position: relative; max-width: 700px; margin: 0 auto; }
 .help-search i {
   position: absolute;
   top: 50%;
@@ -90,7 +93,7 @@ body { background-color: var(--color-bg); color: var(--color-text-dark); }
 }
 .help-search input {
   width: 100%;
-  padding: 18px 20px 18px 50px; /* To hơn */
+  padding: 18px 20px 18px 50px;
   font-size: 1rem;
   border-radius: 10px;
   border: 1px solid var(--color-border);
@@ -130,44 +133,27 @@ body { background-color: var(--color-bg); color: var(--color-text-dark); }
   color: var(--color-text-dark);
   transition: all 0.3s ease;
   border-bottom: 3px solid transparent;
-
-  /* Hiệu ứng Fade-in (ban đầu ẩn) */
   opacity: 0;
   transform: translateY(20px);
 }
-/* Lớp .visible do JS thêm vào */
-.category-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+.category-card.visible { opacity: 1; transform: translateY(0); }
 .category-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
   border-bottom-color: var(--color-green);
 }
-.category-card i {
-  font-size: 2.5rem;
-  color: var(--color-green);
-  margin-bottom: 15px;
-}
-.category-card h3 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-.category-card p {
-  font-size: 0.95rem;
-  color: var(--color-text-light);
-  line-height: 1.6;
-}
+.category-card i { font-size: 2.5rem; color: var(--color-green); margin-bottom: 15px; }
+.category-card h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 10px; }
+.category-card p { font-size: 0.95rem; color: var(--color-text-light); line-height: 1.6; }
 
-/* --- 4. Footer (Copy từ resources.css) --- */
+/* --- 4. Footer --- */
 .footer {
   background: linear-gradient(90deg, #0d1b1e 0%, #112c2f 100%);
   color: #fff;
   padding: 70px 12%;
   margin-top: 80px;
 }
+/* ... (toàn bộ style footer giữ nguyên) ... */
 .footer-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -206,18 +192,45 @@ body { background-color: var(--color-bg); color: var(--color-text-dark); }
 
 /* --- Responsive --- */
 @media (max-width: 1000px) {
-  .category-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .footer-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .sticky-header { padding: 15px 30px; } /* Thêm */
+  .category-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-container { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 600px) {
-  .sticky-header nav { display: none; }
   .help-hero h1 { font-size: 2.2rem; }
-  .category-grid {
-    grid-template-columns: 1fr;
-  }
+  .help-hero { padding: 60px 20px; } /* Sửa */
+  .category-grid { grid-template-columns: 1fr; }
+  .help-categories { padding: 0 20px; } /* Sửa */
+  .footer { padding: 50px 8%; } /* Thêm */
   .footer-container { grid-template-columns: 1fr; }
+
+  /* --- Hamburger Menu Styles --- */
+  .mobile-nav-toggle {
+    display: block; /* Hiển thị nút hamburger */
+  }
+  .sticky-header nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 80px; /* Chiều cao header */
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 20px;
+    z-index: 1050;
+  }
+  .sticky-header nav.nav-visible {
+    display: flex; /* Hiển thị nav khi được click */
+  }
+  .sticky-header nav a {
+    margin: 10px 0;
+    width: 100%;
+    padding: 10px;
+  }
+  .signup-btn {
+    width: 100%;
+    text-align: center;
+    padding: 12px 20px !important;
+  }
 }
