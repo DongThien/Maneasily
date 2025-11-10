@@ -10,7 +10,7 @@ body {
     background-color: #FDFBF6; /* Màu nền be nhạt */
     color: #333;
     overflow-x: hidden; /* Chống cuộn ngang */
-    padding-bottom: 60px; /* Khoảng trống cho footer */
+    padding-bottom: 0px; /* Khoảng trống cho footer */
 }
 
 /* 1. Header */
@@ -87,7 +87,7 @@ body {
     
     /* Đặt chiều cao để lấp đầy không gian (trừ header, footer, padding) */
     /* 51px (header) + 49px (footer) + 40px (padding top/bottom) */
-    height: calc(100vh - 51px - 49px - 40px);
+    height: calc(100vh - 51px);
 }
 
 .board-column {
@@ -195,6 +195,8 @@ body {
 /* Form thêm thẻ (Add Card) */
 .add-card-container, .add-list-container {
     margin-top: 10px;
+    padding-right: 5px;
+    margin-bottom: 8px;
 }
 
 .add-card-trigger, .add-list-trigger {
@@ -296,31 +298,53 @@ body {
 /* 3. Footer */
 .app-footer {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    bottom: 20px; /* Đẩy nó lên khỏi cạnh dưới một chút */
+    left: 50%; /* Căn giữa theo chiều ngang */
+    transform: translateX(-50%); /* Kỹ thuật căn giữa */
+    
+    width: auto; /* Chiều rộng tự động theo nội dung */
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    background-color: #F4F4F4;
-    border-top: 1px solid #DDD;
+    gap: 5px; /* Giảm khoảng cách giữa các nút */
+    
+    padding: 8px; /* Padding cho cả cụm */
+    background-color: #E9E9E9; /* Màu nền xám nhạt như ảnh */
+    border-radius: 25px; /* Bo tròn để tạo hình "pill" */
+    
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Thêm bóng đổ cho đẹp */
+    cursor: grab; /* Thay đổi con trỏ chuột để báo hiệu có thể kéo */
+    
+    /* Đảm bảo nó nổi lên trên */
+    z-index: 1000; 
 }
 
+/* Định kiểu lại các nút bên trong */
 .app-footer button {
-    background: none;
+    background: none; /* Bỏ nền mặc định */
     border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
+    padding: 8px 16px; /* Padding cho từng nút */
+    border-radius: 20px; /* Bo tròn cho cả nút inactive */
     cursor: pointer;
     font-size: 14px;
+    font-weight: 500;
+    color: #333; /* Màu chữ cho nút inactive */
+    transition: background-color 0.2s ease;
 }
 
+/* Style cho nút đang active */
 .app-footer button.active {
-    background-color: #EB7158;
+    background-color: #EB7158; /* Màu cam như trong ảnh */
     color: white;
 }
 
+/* Style cho dấu gạch đứng */
 .app-footer span {
-    color: #CCC;
+    color: #999; /* Làm mờ dấu gạch */
+    margin: 0 5px;
+}
+
+/* Thêm class này để xử lý khi đang kéo */
+.app-footer.dragging {
+    cursor: grabbing;
+    user-select: none; /* Ngăn chọn text khi kéo */
 }

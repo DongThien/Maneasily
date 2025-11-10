@@ -231,6 +231,77 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+// --- 6. Chức năng Kéo Footer (MÃ MỚI) ---
+    
+    const draggableFooter = document.querySelector('.app-footer');
+    let isDraggingFooter = false;
+    let footerOffsetX = 0;
+    let hasDragged = false; // Biến để kiểm tra xem có phải là click hay kéo
+
+    draggableFooter.addEventListener('mousedown', (e) => {
+        // Chỉ bắt đầu kéo nếu click vào nền footer (không phải nút)
+        // HOẶC nếu click vào nút nhưng không phải nút "Switch Boards"
+        // (Chúng ta giả định mọi nút đều có thể dùng để kéo)
+        
+        isDraggingFooter = true;
+        hasDragged = false; // Reset cờ "đã kéo"
+        draggableFooter.classList.add('dragging');
+
+        // Lấy vị trí 'left' hiện tại
+        // Lần đầu tiên, nó sẽ là 50% và có transform.
+        // Chúng ta cần chuyển nó sang pixel.
+        const rect = draggableFooter.getBoundingClientRect();
+        
+        // Chuyển đổi vị trí sang pixel tuyệt đối
+        // và loại bỏ transform để tránh xung đột
+        if (getComputedStyle(draggableFooter).transform !== 'none') {
+             draggableFooter.style.left = `${rect.left}px`;
+             draggableFooter.style.transform = 'none';
+        }
+
+        // Tính toán độ lệch của chuột so với lề trái của footer
+        footerOffsetX = e.clientX - rect.left;
+
+        document.addEventListener('mousemove', onFooterMove);
+        document.addEventListener('mouseup', onFooterUp);
+    });
+
+    function onFooterMove(e) {
+        if (!isDraggingFooter) return;
+        
+        hasDragged = true; // Đánh dấu là người dùng đã kéo
+        e.preventDefault(); // Ngăn các hành vi mặc định (như chọn text)
+
+        let newLeft = e.clientX - footerOffsetX;
+        
+        // Giới hạn kéo, không cho footer ra khỏi màn hình
+        const minLeft = 10; // Cách lề trái 10px
+        const maxLeft = window.innerWidth - draggableFooter.offsetWidth - 10; // Cách lề phải 10px
+
+        if (newLeft < minLeft) newLeft = minLeft;
+        if (newLeft > maxLeft) newLeft = maxLeft;
+
+        draggableFooter.style.left = `${newLeft}px`;
+    }
+
+    function onFooterUp() {
+        if (!isDraggingFooter) return;
+
+        isDraggingFooter = false;
+        draggableFooter.classList.remove('dragging');
+        document.removeEventListener('mousemove', onFooterMove);
+        document.removeEventListener('mouseup', onFooterUp);
+    }
+
+    // Cập nhật: Ngăn các nút kích hoạt sự kiện click nếu đang kéo
+    // Chúng ta cần thêm một 'capture' listener
+    draggableFooter.addEventListener('click', (e) => {
+        if (hasDragged) {
+            e.stopPropagation(); // Ngăn sự kiện click (toggle) nếu đó là một cú kéo
+            e.preventDefault();
+        }
+    }, true); // 'true' để chạy ở 'capture' phase
+
     initResizing();
 
 });
