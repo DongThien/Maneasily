@@ -1,0 +1,378 @@
+/* --- Global & Fonts --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+:root {
+  --color-orange: #ff7f32;
+  --color-orange-hover: #e26f28;
+  --color-green: #2e8b57;
+  --color-green-dark: #3d7050;
+  --color-bg: #fff7ef;
+  --color-text-dark: #333;
+  --color-text-light: #555;
+  --color-border: #ddd;
+}
+
+/* --- Thẻ <html> mượt mà --- */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-dark);
+}
+
+.green { color: var(--color-green); }
+.orange { color: var(--color-orange); }
+
+/* --- 1. Header (Copy từ home.css & chỉnh sửa) --- */
+.sticky-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 80px;
+  /* Hiệu ứng dính (sticky) */
+  position: sticky;
+  top: 0;
+  background-color: var(--color-bg);
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 110px;
+  margin-right: 10px;
+}
+
+.sticky-header nav {
+  display: flex;
+  align-items: center;
+}
+
+.sticky-header nav a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: var(--color-text-dark);
+  font-weight: 500;
+  padding: 8px 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.sticky-header nav a:hover {
+  color: var(--color-orange);
+}
+
+/* Đánh dấu link đang active */
+.sticky-header nav a.active-nav {
+  color: var(--color-orange);
+  font-weight: 600;
+  border-bottom-color: var(--color-orange);
+}
+
+.signup-btn {
+  background-color: var(--color-orange);
+  color: white !important; /* Ghi đè màu chữ */
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px !important; /* Ghi đè padding */
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  border-bottom: none !important; /* Ghi đè border */
+  transition: background-color 0.2s ease;
+}
+
+.signup-btn:hover {
+  background-color: var(--color-orange-hover);
+  color: white !important;
+}
+
+/* --- 2. Hero Section --- */
+.hero-section {
+  text-align: center;
+  padding: 80px 40px;
+  background-color: #fff;
+}
+
+.hero-section h1 {
+  font-size: 3rem; /* 48px */
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.hero-section p {
+  font-size: 1.1rem;
+  color: var(--color-text-light);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* --- 3. Bố cục Features (Sidebar + Content) --- */
+.features-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 40px;
+  position: relative;
+  gap: 60px;
+}
+
+/* --- 3a. Sidebar --- */
+.features-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.features-sidebar nav {
+  position: sticky;
+  top: 120px; /* Dưới header (80px) + khoảng cách */
+}
+
+.sidebar-link {
+  display: block;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-light);
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-link:hover {
+  background-color: #fff;
+  color: var(--color-text-dark);
+}
+
+.sidebar-link.active-link {
+  background-color: #fff;
+  color: var(--color-orange);
+  font-weight: 600;
+  border-left-color: var(--color-orange);
+  transform: translateX(5px);
+}
+
+/* --- 3b. Content --- */
+.features-content {
+  flex-grow: 1;
+}
+
+.feature-section {
+  display: flex;
+  gap: 50px;
+  align-items: center;
+  margin-bottom: 120px;
+  min-height: 400px; /* Đảm bảo đủ chiều cao cho scrollspy */
+  padding-top: 40px; /* Offset cho scrollspy */
+  
+  /* Hiệu ứng Fade-in (ban đầu ẩn) */
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Lớp .visible do JS thêm vào */
+.feature-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Đảo ngược thứ tự cho section chẵn (Image-Text) */
+.feature-section:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.feature-text {
+  flex: 1;
+}
+
+.feature-subtitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.feature-text h2 {
+  font-size: 2.5rem; /* 40px */
+  margin-bottom: 20px;
+}
+
+.feature-text p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--color-text-light);
+}
+
+.feature-image {
+  flex: 1.1;
+}
+
+.feature-image img {
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+}
+
+
+/* --- 4. Footer (Copy từ home.css) --- */
+.footer {
+  background: linear-gradient(90deg, #0d1b1e 0%, #112c2f 100%);
+  color: #fff;
+  padding: 70px 12%;
+  margin-top: 80px;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 50px;
+  align-items: flex-start;
+}
+
+.footer-col h3 {
+  font-size: 1.5rem;
+  color: #ff7f32;
+  margin-bottom: 15px;
+}
+
+.footer-col h4 {
+  font-size: 1.1rem;
+  color: #32b768;
+  margin-bottom: 15px;
+}
+
+.footer-col p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #ccc;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+  color: #ff7f32;
+}
+
+.social-links {
+  display: flex;
+  gap: 12px;
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: #32b768;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+  background-color: #ff7f32;
+  transform: translateY(-3px);
+}
+
+.footer-bottom {
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: 40px;
+  padding-top: 20px;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+/* --- Responsive (Đơn giản) --- */
+@media (max-width: 1000px) {
+  .sticky-header {
+    padding: 15px 30px;
+  }
+  
+  .features-container {
+    flex-direction: column;
+  }
+  
+  .features-sidebar {
+    width: 100%;
+  }
+  
+  .features-sidebar nav {
+    position: static; /* Hủy dính */
+    display: flex;
+    overflow-x: auto; /* Cho phép cuộn ngang */
+    gap: 10px;
+  }
+
+  .sidebar-link {
+    flex-shrink: 0; /* Không co lại */
+    border-bottom: 3px solid transparent;
+    border-left: none;
+  }
+
+  .sidebar-link.active-link {
+    border-bottom-color: var(--color-orange);
+    border-left-color: transparent;
+    transform: none;
+  }
+
+  .feature-section,
+  .feature-section:nth-child(even) {
+    flex-direction: column-reverse; /* Luôn là Ảnh - Text */
+  }
+
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .sticky-header nav {
+    display: none; /* Ẩn nav trên mobile */
+  }
+  .hero-section h1 {
+    font-size: 2.2rem;
+  }
+  .feature-text h2 {
+    font-size: 2rem;
+  }
+  .footer-container {
+    grid-template-columns: 1fr;
+  }
+}
